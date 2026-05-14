@@ -1,0 +1,26 @@
+# Render Blueprint — one-click deploy.
+#
+# After forking this repo:
+#   1. Sign in to https://dashboard.render.com
+#   2. New +  →  Blueprint
+#   3. Connect your fork; Render will read this file and provision the service.
+#
+# Render injects PORT automatically, so no extra env vars are required to run.
+# The SurveySparrow API key is supplied by each user in the browser — it is
+# never stored server-side.
+services:
+  - type: web
+    name: weave-survey-importer
+    runtime: node
+    plan: free
+    region: oregon
+    # tsx + TypeScript run directly; no compile step is needed.
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: info
